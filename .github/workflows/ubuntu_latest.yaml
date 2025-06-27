@@ -18,7 +18,27 @@ jobs:
         run: |
           DOCKER_BUILDKIT=1 docker build --file test/docker/Dockerfile_ubuntu_latest --tag ubuntu_latest-image .
           docker run -e SELECTED_SHELL="zsh" --rm ubuntu_latest-image
+      
+      - name: Upload new files logs with ZSH as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: log_artifacts_ubuntu_zsh
+          path: |
+            new_modified_home_files_after_install_zsh.txt
+            new_modified_root_files_after_install_zsh.txt
+            new_modified_home_files_after_install_unistall_zsh.txt
+            new_modified_root_files_after_install_unistall_zsh.txt
 
       - name: Build and run Docker container for BASH
         run: |
           docker run -e SELECTED_SHELL="bash" --rm ubuntu_latest-image
+
+      - name: Upload new files logs with BASH as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: log_artifacts_ubuntu_bash
+          path: |
+            new_modified_home_files_after_install_bash.txt
+            new_modified_root_files_after_install_bash.txt
+            new_modified_home_files_after_install_unistall_bash.txt
+            new_modified_root_files_after_install_unistall_bash.txt
