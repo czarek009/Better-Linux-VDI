@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 # GLOBAL PATHS FOR ENTIRE PROJECT
 # Parameter for setting shell config file that will be used by a user (bashrc/zshrc)
 # TODO: Needs to be modifiable by the initial script configuration.
@@ -69,5 +70,10 @@ source ./LinuxRootlessDevKit.sh
 
 LinuxRootlessDevKit::install "${SELECTED_SHELL}"
 LinuxRootlessDevKit::verify_installation "${SELECTED_SHELL}"
+
+echo "Files created or modified in /home after install started:"
+find /home -type d \( -path "/home/$USER/.cache" -o -path "/home/$USER/.var" \) -prune -o \
+-type f \( -newermt "$START_TIME" -o -newerct "$START_TIME" \) -print
+
 LinuxRootlessDevKit::uninstall "${SELECTED_SHELL}"
 LinuxRootlessDevKit::verify_uninstallation "${SELECTED_SHELL}"
