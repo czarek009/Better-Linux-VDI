@@ -6,10 +6,9 @@ ENV_CONFIGURATOR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/../envConfigurator" 
 source "${ENV_CONFIGURATOR_PATH}"
 
 remove_dirs() {
-	echo "Removing Go directories"
-	local goroot="${HOME}/.local/go"
-	local gopath="${HOME}/go"
-	rm -rf "${goroot}" "${gopath}"
+    echo "Removing Go directories"
+    EnvConfigurator::remove_dir_if_exists "${HOME}/.local/go" "y"
+    EnvConfigurator::remove_dir_if_exists "${HOME}/go" "y"
 }
 
 # shellcheck disable=SC2016

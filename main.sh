@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-# GLOBAL library: env_paths_lib
+# GLOBAL library: env_variables and  envConfigrautor
 # Parameter for setting shell config file that will be used by a user (bashrc/zshrc)
 # TODO: Needs to be modifiable by the initial script configuration.
 
 ENV_PATHS_LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/src/env_variables.sh"
 source "${ENV_PATHS_LIB}"
+ENV_CONFIGURATOR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/src/envConfigurator/envConfigurator.sh"
+source "${ENV_CONFIGURATOR_PATH}"
 
 # Run envConfigurator test sequence:
 echo "ℹ️ Running envConfigurator test sequence..."
@@ -54,13 +56,9 @@ logger_check_str "test_logger" "this/file/does/not/exist' does not exist"
 logger_check_str "test_logger" "Command 'ls' exists"
 logger_check_str "test_logger" "Command 'thiscommanddoesnotexist' does not exist"
 logger_check_str "testTraps" "Script interrupted by user"
-rm -r "$TEST_LOG_DIR"
+EnvConfigurator::remove_dir_if_exists "$TEST_LOG_DIR" "y"
 
-
-if [ ! -f "${SHELLRC_PATH}" ]
-then
-  touch "${SHELLRC_PATH}"
-fi
+EnvConfigurator::create_file_if_not_exists "${SHELLRC_PATH}"
 
 source ./LinuxRootlessDevKit.sh
 
